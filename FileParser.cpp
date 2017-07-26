@@ -13,8 +13,7 @@ using namespace std;
 FileParser::FileParser() { }
 FileParser::~FileParser() { }
 
-std::vector<Note*> FileParser::parse(std::string filepath)
-{
+std::vector<Note*> FileParser::parse(std::string filepath) {
 	bool autoCountNote = true;
 
 	std::ifstream s2s;

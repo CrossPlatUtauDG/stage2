@@ -5,13 +5,13 @@
 
 using namespace std;
 
-class rndsys {
+class RndSys {
 	public:
-		rndsys(vector<Note> ntlist) { ntlst = ntlist; }
-		~rndsys();
+		RndSys(vector<Note> ntlist) { ntlst = ntlist; }
+		~RndSys();
 		
-		void preparernd(vector<Note>);
-		void genargs(vector<Note>);
+		void prepRnd(vector<Note>);
+		void genArgs(vector<Note>);
 	
 	private:
 		vector<Note> ntlst;
