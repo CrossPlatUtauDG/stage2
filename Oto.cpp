@@ -108,7 +108,7 @@ void Oto::openFile() {
 			
 			index++;
 		}
-		//voices.resize(index + 1);
+		voices.resize(index + 1);
 	}
 }
 
