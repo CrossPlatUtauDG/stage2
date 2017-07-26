@@ -14,7 +14,7 @@ int main() {
 	FileParser fParser;
 	std::vector<Note*> noteList = fParser.parse("example.s2s");
 #if DEBUG
-	for (int i = 0; i < noteList.size(); i++) {
+	for (unsigned int i = 0; i < noteList.size(); i++) {
 		std::cout << "Note " << i << ":" << endl;
 		std::cout << "\tContent:\t" << noteList[i]->getContent() << std::endl;
 		std::cout << "\tLength:\t\t" << noteList[i]->getLength() << std::endl;
@@ -22,7 +22,7 @@ int main() {
 		std::cout << "\tVelocity:\t" << noteList[i]->getVelocity() << std::endl;
 		std::cout << "\tFlags:\t\t" << noteList[i]->getFlags() << std::endl;
 		std::cout << "\tTempo:\t\t" << noteList[i]->getTempo() << std::endl;
-		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::end1;
+		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::endl;
 		//std::cout << TODO: complete
 	}
 #endif

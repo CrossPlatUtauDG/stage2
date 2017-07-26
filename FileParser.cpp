@@ -51,18 +51,23 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 				// enable/disable auto note counting
 				else {
 					// count notes, set properties
-					if (autoCountNote && std::stoi(noteNum) >= notes.size()) {
+					unsigned int oldListSize = notes.size();
+					if (autoCountNote && (unsigned int)std::stoi(noteNum) >= notes.size()) {
 #if DEBUG
-						cout << "Current notes size: " << notes.size() << std::endl;
+						std::clog << "DEBUG: Current notes size: " << notes.size() << std::endl;
 #endif 						
 						notes.resize(std::stoi(noteNum) + 1);
 #if DEBUG
-						cout << "New Notes size: " << notes.size() << "\n";
+						std::clog << "DEBUG: New Notes size: " << notes.size() << "\n";
 #endif						
 					}
-					if (notes[std::stoi(noteNum)] == nullptr) notes[std::stoi(noteNum)] =
-						new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo, 
+					
+					bool isNoteNew = false;
+					if (notes[std::stoi(noteNum)] == nullptr) {
+						notes[std::stoi(noteNum)] = new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo,
 							globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
+						isNoteNew = true;
+					}
 
 					if (noteProp == "content") notes[std::stoi(noteNum)]->setContent(value);
 					else if (noteProp == "length") notes[std::stoi(noteNum)]->setLength(std::stoi(value));
@@ -76,12 +81,19 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 					else if (noteProp == "pitdata") notes[std::stoi(noteNum)]->setPitchCode(value);
 					//else if (noteProp == "env") notes[std::stoi(noteNum)]->envelope)[]
 					//TODO: make envelopes work...
-					else cout << "Invalid property: " << noteProp << std::endl;
+					else if (isNoteNew) { //Invalid new note. Revert vector resize.
+						cout << "Error: Invalid property: " << noteProp << std::endl;
+						cout << "Error: Resizing vector back from " << notes.size() << " to " << oldListSize << std::endl;
+						delete notes[std::stoi(noteNum)];
+						notes.resize(oldListSize);
+					} else {
+						cout << "Error: Invalid property: " << noteProp << std::endl;
+					}
 				}
 			}
 		}
 	}
-	
+	fillInvalidNotes(&notes);
 	return notes;
 }
 
@@ -92,7 +104,7 @@ vector<int> FileParser::envFromStr(std::string envstr) {
 #if DEBUG
 	std::clog << "DEBUG: Attempting to convert env " << envstr << std::endl;
 #endif	
-	for (int i = 0; i < envstr.length(); i++) {
+	for (unsigned int i = 0; i < envstr.length(); i++) {
 		if (envstr[i] == ',') { 
 			envPointIndex++;
 #if DEBUG
@@ -134,7 +146,7 @@ bool FileParser::isLineValid(std::string line) {
 	//Checks if noteID is valid
 	std::string noteID = line.substr(0, key.find("."));
 	if (noteID != "global") {
-		for (int i = 0; i < noteID.size(); i++) {
+		for (unsigned int i = 0; i < noteID.size(); i++) {
 			if (!isdigit(noteID[i])) {
 				std::cerr << "Error: Invalid noteID: " << line << std::endl;
 				return false;
@@ -150,4 +162,24 @@ bool FileParser::isLineValid(std::string line) {
 	}
 
 	return true;
+}
+
+void FileParser::fillInvalidNotes(std::vector<Note*> *notelist) {
+#if DEBUG
+	std::clog << std::endl << "DEBUG: Filling up empty notes" << std::endl;
+#endif
+	int emptyNotes = 0;
+	for (unsigned int i = 0; i < notelist->size(); i++) {
+		if (notelist->at(i) == nullptr) {
+			notelist->at(i) = new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo,
+				globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
+#if DEBUG
+			std::clog << "DEBUG: Filled up empty note: " << i << std::endl;
+#endif
+			emptyNotes++;
+		}
+	}
+#if DEBUG
+	std::clog << "DEBUG: " << emptyNotes << " notes were filled" << std::endl << std::endl;
+#endif
 }

@@ -1,3 +1,6 @@
+#ifndef RNDSYS_H
+#define RNDSYS_H
+
 #include <string>
 #include <vector>
 
@@ -16,3 +19,5 @@ class RndSys {
 	private:
 		vector<Note> ntlst;
 };
+
+#endif

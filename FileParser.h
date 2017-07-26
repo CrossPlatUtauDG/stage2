@@ -1,3 +1,6 @@
+#ifndef FILEPARSER_H
+#define FILEPARSER_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -29,6 +32,8 @@ class FileParser {
 		vector<int> globalEnv = {0, 0, 100, 5, 100, 35, 0, 0};
 
 		bool isLineValid(std::string line);
-		void fillInvalidNotes(vector<Note*> nlist);
+		void fillInvalidNotes(vector<Note*>* notelist);
 		vector<int> envFromStr(std::string envstr);
 };
+
+#endif
