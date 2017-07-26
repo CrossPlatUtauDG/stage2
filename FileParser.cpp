@@ -38,13 +38,14 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 					<< "noteNum = " << noteNum << "\n" << "NoteProp = "
 					<< noteProp << "\n\n";
 #endif					
-				// Set globals
+				// Set globals TODO: this needs all the properties a Note does
 				if (noteNum == "global") {
 					if (noteProp == "vb") globalVB = value;
 					else if (noteProp == "tempo") globalTempo = std::stod(value);
 					else if (noteProp == "flags") globalFlags = value;
 					else if (noteProp == "pitch") globalPitch = value;
 					else if (noteProp == "length") globalLength = std::stoi(value);	
+					else if (noteProp == "vb") globalVB = value;
 					else std::cerr << "Error: Invalid property: " << noteProp << std::endl;
 					cout << "past this \n";
 				}

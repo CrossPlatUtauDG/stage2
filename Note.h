@@ -22,7 +22,6 @@ public:
 	void setVbPath(std::string vbpath);
 	void setModulation(int modulation);
 	void setPitchCode(string pitchcode);
-	void setEnvelope(vector<int> envelope);
 
 	std::string getContent();
 	int getLength();
@@ -34,7 +33,9 @@ public:
 	std::string getVbPath();
 	int getModulation();
 	std::string getPitchCode();
-	vector<int> getEnvelope();
+	
+	vector<int> envelope;
+	int corrVal;
 
 private:
 	std::string content;
@@ -46,9 +47,7 @@ private:
 	int restlength;
 	std::string vbpath;
 	int modulation;
-	string pitchcode;	
-	vector<int> envelope;
+	string pitchcode;
 	
 };
-
 #endif

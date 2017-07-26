@@ -25,7 +25,6 @@ void Note::setRestLength(int restlength) { this->restlength = restlength; }
 void Note::setVbPath(std::string vbpath) { this->vbpath = vbpath; }
 void Note::setModulation(int modulation) { this->modulation = modulation; }
 void Note::setPitchCode(string pitchcode) { this->pitchcode = pitchcode; }
-void Note::setEnvelope(vector<int> envelope) { this->envelope = envelope; }
 
 std::string Note::getContent() { return content; }
 int Note::getLength() { return length; }
@@ -37,4 +36,3 @@ int Note::getRestLength() { return restlength; }
 std::string Note::getVbPath() { return vbpath; }
 int Note::getModulation() { return modulation; }
 std::string Note::getPitchCode() { return pitchcode; }
-vector<int> Note::getEnvelope() { return envelope; }
