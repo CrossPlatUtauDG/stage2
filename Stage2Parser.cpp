@@ -22,6 +22,8 @@ int main() {
 		std::cout << "\tVelocity:\t" << noteList[i]->getVelocity() << std::endl;
 		std::cout << "\tFlags:\t\t" << noteList[i]->getFlags() << std::endl;
 		std::cout << "\tTempo:\t\t" << noteList[i]->getTempo() << std::endl;
+		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::end1;
+		//std::cout << TODO: complete
 	}
 #endif
 	for (int i = 0; i < noteList.size(); i++) delete noteList[i];

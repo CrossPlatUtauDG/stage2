@@ -31,8 +31,7 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 				std::string value = line.substr(line.find("=") + 1, line.size());
 				std::string noteNum = key.substr(0, key.find("."));
 				std::string noteProp = key.substr(key.find(".") + 1, key.size());
-				
-				int noteindex = std::stoi(noteNum);
+
 #if DEBUG				
 				std::clog << "DEBUG: Results from line parsing:\n";
 				std::clog << "key = " << key << "\n" << "value = " << value << "\n"
@@ -61,21 +60,22 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 						cout << "New Notes size: " << notes.size() << "\n";
 #endif						
 					}
-					if (notes[noteindex] == nullptr) notes[noteindex] =
+					if (notes[std::stoi(noteNum)] == nullptr) notes[std::stoi(noteNum)] =
 						new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo, 
 							globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
 
-					if (noteProp == "content") notes[noteindex]->setContent(value);
-					else if (noteProp == "length") notes[noteindex]->setLength(std::stoi(value));
-					else if (noteProp == "pitch") notes[noteindex]->setPitch(value);
-					else if (noteProp == "tempo") notes[noteindex]->setTempo(std::stod(value));
-					else if (noteProp == "vel") notes[noteindex]->setVelocity(std::stoi(value));
-					else if (noteProp == "flags") notes[noteindex]->setFlags(value);
-					else if (noteProp == "rest") notes[noteindex]->setRestLength(std::stoi(value));
-					else if (noteProp == "vb") notes[noteindex]->setVbPath(value);
-					else if (noteProp == "mod") notes[noteindex]->setModulation(std::stoi(value));
-					else if (noteProp == "pitdata") notes[noteindex]->setPitchCode(value);
-					else if (noteProp == "env") notes[noteindex]->setEnvelope(envFromStr(value));
+					if (noteProp == "content") notes[std::stoi(noteNum)]->setContent(value);
+					else if (noteProp == "length") notes[std::stoi(noteNum)]->setLength(std::stoi(value));
+					else if (noteProp == "pitch") notes[std::stoi(noteNum)]->setPitch(value);
+					else if (noteProp == "tempo") notes[std::stoi(noteNum)]->setTempo(std::stod(value));
+					else if (noteProp == "vel") notes[std::stoi(noteNum)]->setVelocity(std::stoi(value));
+					else if (noteProp == "flags") notes[std::stoi(noteNum)]->setFlags(value);
+					else if (noteProp == "rest") notes[std::stoi(noteNum)]->setRestLength(std::stoi(value));
+					else if (noteProp == "vb") notes[std::stoi(noteNum)]->setVbPath(value);
+					else if (noteProp == "mod") notes[std::stoi(noteNum)]->setModulation(std::stoi(value));
+					else if (noteProp == "pitdata") notes[std::stoi(noteNum)]->setPitchCode(value);
+					//else if (noteProp == "env") notes[std::stoi(noteNum)]->envelope)[]
+					//TODO: make envelopes work...
 					else cout << "Invalid property: " << noteProp << std::endl;
 				}
 			}
