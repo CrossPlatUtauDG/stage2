@@ -1,6 +1,6 @@
-# stage2 prototype file 1
+# Stage2 prototype file 1
 
-# globals set properties for all notes
+# Globals set properties for all notes
 # (but can be overridden by setting them)
 global.VB=/home/user/example
 global.tempo=120
@@ -8,19 +8,19 @@ global.flags=B1
 global.pitch=A4 
 global.length=480
 
-# note count may be required to ease parsing
-
-# per-note properties
+# Per-note properties
 0.content=la
 0.length=360 
 0.pitch=G4
 0.vel=100
 0.flags=B40
 
-# we can set properties any order we want:
+# Properties can be set in any order
 2.content=a 
 1.content=te
+# Undefined properties default to the global settings
 
-# we didn't define these notes' length or
-# pitch properties, so they'll assume the 
-# global properties already set.
+# Error tolerance tests
+This is an invalid line
+This line has=an invalid key
+this.line=has an invalid noteID
