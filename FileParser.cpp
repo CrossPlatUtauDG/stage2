@@ -30,21 +30,24 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 				std::string key = line.substr(0, line.find("="));
 				std::string value = line.substr(line.find("=") + 1, line.size());
 				std::string noteNum = key.substr(0, key.find("."));
-				std::string noteProperty = key.substr(key.find(".") + 1, key.size());
+				std::string noteProp = key.substr(key.find(".") + 1, key.size());
+				
+				int noteindex = std::stoi(noteNum);
 #if DEBUG				
 				std::clog << "DEBUG: Results from line parsing:\n";
 				std::clog << "key = " << key << "\n" << "value = " << value << "\n"
-					<< "noteNum = " << noteNum << "\n" << "noteProperty = "
-					<< noteProperty << "\n\n";
+					<< "noteNum = " << noteNum << "\n" << "NoteProp = "
+					<< noteProp << "\n\n";
 #endif					
 				// Set globals
 				if (noteNum == "global") {
-					if (noteProperty == "VB") globalVB = value;
-					else if (noteProperty == "tempo") globalTempo = std::stod(value);
-					else if (noteProperty == "flags") globalFlags = value;
-					else if (noteProperty == "pitch") globalPitch = value;
-					else if (noteProperty == "length") globalLength = std::stoi(value);
-					else std::cerr << "Error: Invalid property: " << noteProperty << std::endl;
+					if (noteProp == "vb") globalVB = value;
+					else if (noteProp == "tempo") globalTempo = std::stod(value);
+					else if (noteProp == "flags") globalFlags = value;
+					else if (noteProp == "pitch") globalPitch = value;
+					else if (noteProp == "length") globalLength = std::stoi(value);	
+					else std::cerr << "Error: Invalid property: " << noteProp << std::endl;
+					cout << "past this \n";
 				}
 				// enable/disable auto note counting
 				else {
@@ -58,24 +61,56 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 						cout << "New Notes size: " << notes.size() << "\n";
 #endif						
 					}
-					if (notes[std::stoi(noteNum)] == nullptr) notes[std::stoi(noteNum)] =
-						new Note("a", globalLength, globalPitch, 100, globalTempo, globalFlags);
+					if (notes[noteindex] == nullptr) notes[noteindex] =
+						new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo, 
+							globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
 
-					if (noteProperty == "content") notes[std::stoi(noteNum)]->setContent(value);
-					else if (noteProperty == "length") notes[std::stoi(noteNum)]->setLength(std::stoi(value));
-					else if (noteProperty == "pitch") notes[std::stoi(noteNum)]->setPitch(value);
-					else if (noteProperty == "tempo") notes[std::stoi(noteNum)]->setTempo(std::stod(value));
-					else if (noteProperty == "vel") notes[std::stoi(noteNum)]->setVelocity(std::stoi(value));
-					else if (noteProperty == "flags") notes[std::stoi(noteNum)]->setFlags(value);
-					else cout << "Invalid property: " << noteProperty << std::endl;
+					if (noteProp == "content") notes[noteindex]->setContent(value);
+					else if (noteProp == "length") notes[noteindex]->setLength(std::stoi(value));
+					else if (noteProp == "pitch") notes[noteindex]->setPitch(value);
+					else if (noteProp == "tempo") notes[noteindex]->setTempo(std::stod(value));
+					else if (noteProp == "vel") notes[noteindex]->setVelocity(std::stoi(value));
+					else if (noteProp == "flags") notes[noteindex]->setFlags(value);
+					else if (noteProp == "rest") notes[noteindex]->setRestLength(std::stoi(value));
+					else if (noteProp == "vb") notes[noteindex]->setVbPath(value);
+					else if (noteProp == "mod") notes[noteindex]->setModulation(std::stoi(value));
+					else if (noteProp == "pitdata") notes[noteindex]->setPitchCode(value);
+					else if (noteProp == "env") notes[noteindex]->setEnvelope(envFromStr(value));
+					else cout << "Invalid property: " << noteProp << std::endl;
 				}
 			}
 		}
 	}
-
-	//TODO: calculate offset and whatnot, invoke tools
-
+	
 	return notes;
+}
+
+vector<int> FileParser::envFromStr(std::string envstr) {
+	vector<std::string> envPointsStrs;
+	vector<int> envPoints;
+	int envPointIndex = 0;
+#if DEBUG
+	std::clog << "DEBUG: Attempting to convert env " << envstr << std::endl;
+#endif	
+	for (int i = 0; i < envstr.length(); i++) {
+		if (envstr[i] == ',') { 
+			envPointIndex++;
+#if DEBUG
+			std::clog << "DEBUG: Envelope point " << std::to_string(envPointIndex)
+				<< " = " << envPointsStrs[envPointIndex];
+#endif
+		}
+		else envPointsStrs[envPointIndex][i] = envstr[i];
+	}
+	
+	envPointIndex = 0;
+	
+	for (string str: envPointsStrs) {
+		envPoints[envPointIndex] = std::stoi(str);		
+		envPointIndex++;
+	}
+	
+	return envPoints;
 }
 
 bool FileParser::isLineValid(std::string line) {

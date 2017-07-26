@@ -17,10 +17,18 @@ class FileParser {
 	private:
 		std::vector<Note*> notes;
 		std::string globalVB;
-		double globalTempo = 120;
+		std::string globalContent = "a";
 		std::string globalFlags = "";
 		std::string globalPitch = "C4";
+		std::string globalPitchCode = "";
 		int globalLength = 480;
+		int globalVelocity = 100;
+		int globalRest = 0;
+		int globalModulation = 0;
+		double globalTempo = 120;
+		vector<int> globalEnv;
 
 		bool isLineValid(std::string line);
+		void fillInvalidNotes(vector<Note*> nlist);
+		vector<int> envFromStr(std::string envstr);
 };
