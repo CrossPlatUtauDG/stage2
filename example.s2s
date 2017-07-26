@@ -11,15 +11,15 @@ global.length=480
 # note count may be required to ease parsing
 
 # per-note properties
-1.content=la
-1.length=360 
-1.pitch=G4
-1.vel=100
-1.flags=B40
+0.content=la
+0.length=360 
+0.pitch=G4
+0.vel=100
+0.flags=B40
 
 # we can set properties any order we want:
-3.content=a 
-2.content=te
+2.content=a 
+1.content=te
 
 # we didn't define these notes' length or
 # pitch properties, so they'll assume the 
