@@ -2,7 +2,7 @@
 
 # Globals set properties for all notes
 # (but can be overridden by setting them)
-global.VB=/home/user/example
+global.vb=/home/user/example
 global.tempo=120
 global.flags=B1
 global.pitch=A4 
@@ -14,6 +14,21 @@ global.length=480
 0.pitch=G4
 0.vel=100
 0.flags=B40
+0.rest=0
+0.vb=/home/user/example2
+0.mod=8
+0.pitdata=asdfasdfsasdf
+
+# a possibly better way to do this is a comma separated list
+# but I did this because it's easier to process
+0.envx0=0
+0.envy0=0
+0.envx1=90
+0.envy1=10
+0.envx2=110
+0.envy2=40
+0.envx3=0
+0.envy3=0
 
 # Properties can be set in any order
 2.content=a 
