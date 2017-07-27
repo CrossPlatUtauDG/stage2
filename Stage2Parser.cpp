@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <exception>
 
 #include "Note.h"
 #include "FileParser.h"
@@ -11,32 +12,48 @@
 
 using namespace std;
 
-int main() {
-	FileParser fParser;
-	RndSys rendersys;
-	std::vector<Note*> noteList = fParser.parse("example.s2s");
+int main(int argc, char* argv[]) {
 	
-	for (unsigned int i = 0; i < noteList.size(); i++) {
-		if (noteList[i] == nullptr) 
-			std::cout << "Note " << std::to_string(i) << " is invalid";
-#if DEBUG			
-		std::cout << "Note " << i << ":" << endl;
-		std::cout << "\tContent:\t" << noteList[i]->getContent() << std::endl;
-		std::cout << "\tLength:\t\t" << noteList[i]->getLength() << std::endl;
-		std::cout << "\tPitch:\t\t" << noteList[i]->getPitch() << std::endl;
-		std::cout << "\tVelocity:\t" << noteList[i]->getVelocity() << std::endl;
-		std::cout << "\tFlags:\t\t" << noteList[i]->getFlags() << std::endl;
-		std::cout << "\tTempo:\t\t" << noteList[i]->getTempo() << std::endl;
-		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::endl;
-		std::cout << "\tVB Path:\t" << noteList[i]->getVbPath() << std::endl;
+	// Uncomment to accept filename as argument
+	//if (argc < 2) {
+	//	std::cerr << "Usage: " << argv[0] << "s2s_file" << std::endl;
+	//	return 1;
+	//}
+	
+	FileParser fParser;
+	RndSys renderSystem;
+	std::vector<Note*> noteList;
+
+	try {
+		// Uncomment following line to receive filename from argument
+		//std::string s2sFilePath(argv[1]);
+		// Remove following line to receive filename from argument
+		std::string s2sFilePath = "example.s2s";
+		noteList = fParser.parse(s2sFilePath);
+	} catch (std::exception e) {
+		std::cerr << "Exception Thrown: " << e.what() << std::endl;
+		return 1;
+	}
+
+#if DEBUG
+	for (Note* note : noteList) {
+		std::cout << "Note " << note->getNoteId() << ":" << endl;
+		std::cout << "\tContent:\t" << note->getContent() << std::endl;
+		std::cout << "\tLength:\t\t" << note->getLength() << std::endl;
+		std::cout << "\tPitch:\t\t" << note->getPitch() << std::endl;
+		std::cout << "\tVelocity:\t" << note->getVelocity() << std::endl;
+		std::cout << "\tFlags:\t\t" << note->getFlags() << std::endl;
+		std::cout << "\tTempo:\t\t" << note->getTempo() << std::endl;
+		std::cout << "\tRest:\t\t" << note->getRestLength() << std::endl;
+		std::cout << "\tVB Path:\t" << note->getVbPath() << std::endl;
 		std::cout << std::endl;
 		//std::cout << TODO: complete
-#endif
 	}
+#endif
 	
-	rendersys.prepRnd(noteList);
+	renderSystem.prepareRender(noteList);
 
-	for (int i = 0; i < noteList.size(); i++) delete noteList[i];
+	for (unsigned int i = 0; i < noteList.size(); i++) delete noteList[i];
 		
     return 0;
 }

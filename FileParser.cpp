@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <exception>
 
 #include "Note.h"
 #include "FileParser.h"
@@ -14,8 +15,6 @@ FileParser::FileParser() { }
 FileParser::~FileParser() { }
 
 std::vector<Note*> FileParser::parse(std::string filepath) {
-	bool autoCountNote = true;
-
 	std::ifstream s2s;
 	s2s.open(filepath);
 	if (s2s.is_open()) {
@@ -29,72 +28,72 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 				// Parse line
 				std::string key = line.substr(0, line.find("="));
 				std::string value = line.substr(line.find("=") + 1, line.size());
-				std::string noteNum = key.substr(0, key.find("."));
-				std::string noteProp = key.substr(key.find(".") + 1, key.size());
+				std::string keyName = key.substr(0, key.find("."));
+				std::string keyProp = key.substr(key.find(".") + 1, key.size());
 
 #if DEBUG				
 				std::clog << "DEBUG: Results from line parsing:\n";
-				std::clog << "key = " << key << "\n" << "value = " << value << "\n"
-					<< "noteNum = " << noteNum << "\n" << "NoteProp = "
-					<< noteProp << "\n\n";
+				std::clog << "key = " << key << "\n"
+					<< "value = " << value << "\n"
+					<< "keyName = " << keyName << "\n"
+					<< "keyProp = " << keyProp << "\n\n";
 #endif					
 				// Set globals TODO: this needs all the properties a Note does
-				if (noteNum == "global") {
-					if (noteProp == "vb") globalVB = value;
-					else if (noteProp == "tempo") globalTempo = std::stod(value);
-					else if (noteProp == "flags") globalFlags = value;
-					else if (noteProp == "pitch") globalPitch = value;
-					else if (noteProp == "length") globalLength = std::stoi(value);	
-					else if (noteProp == "vb") globalVB = value;
-					else std::cerr << "Error: Invalid property: " << noteProp << std::endl;
-					cout << "past this \n";
-				}
-				// enable/disable auto note counting
-				else {
-					// count notes, set properties
+				if (keyName == "global") {
+					if (keyProp == "vb") globalVB = value;
+					else if (keyProp == "tempo") globalTempo = std::stod(value);
+					else if (keyProp == "flags") globalFlags = value;
+					else if (keyProp == "pitch") globalPitch = value;
+					else if (keyProp == "length") globalLength = std::stoi(value);
+					else if (keyProp == "vb") globalVB = value;
+					else std::cerr << "Error: Invalid property: " << keyProp << std::endl << std::endl;
+				} else {
+					unsigned int noteId = std::stoi(keyName);
 					unsigned int oldListSize = notes.size();
-					if (autoCountNote && (unsigned int)std::stoi(noteNum) >= notes.size()) {
+					if (noteId >= notes.size()) {
 #if DEBUG
 						std::clog << "DEBUG: Current notes size: " << notes.size() << std::endl;
 #endif 						
-						notes.resize(std::stoi(noteNum) + 1);
+						notes.resize(noteId + 1);
 #if DEBUG
 						std::clog << "DEBUG: New Notes size: " << notes.size() << "\n";
-#endif						
+#endif				
 					}
 					
 					bool isNoteNew = false;
-					if (notes[std::stoi(noteNum)] == nullptr) {
-						notes[std::stoi(noteNum)] = new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo,
+					if (notes[noteId] == nullptr) {
+						notes[noteId] = new Note(noteId, globalContent, globalLength, globalPitch, globalVelocity, globalTempo,
 							globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
 						isNoteNew = true;
 					}
 
-					if (noteProp == "content") notes[std::stoi(noteNum)]->setContent(value);
-					else if (noteProp == "length") notes[std::stoi(noteNum)]->setLength(std::stoi(value));
-					else if (noteProp == "pitch") notes[std::stoi(noteNum)]->setPitch(value);
-					else if (noteProp == "tempo") notes[std::stoi(noteNum)]->setTempo(std::stod(value));
-					else if (noteProp == "vel") notes[std::stoi(noteNum)]->setVelocity(std::stoi(value));
-					else if (noteProp == "flags") notes[std::stoi(noteNum)]->setFlags(value);
-					else if (noteProp == "rest") notes[std::stoi(noteNum)]->setRestLength(std::stoi(value));
-					else if (noteProp == "vb") notes[std::stoi(noteNum)]->setVbPath(value);
-					else if (noteProp == "mod") notes[std::stoi(noteNum)]->setModulation(std::stoi(value));
-					else if (noteProp == "pitdata") notes[std::stoi(noteNum)]->setPitchCode(value);
-					//else if (noteProp == "env") notes[std::stoi(noteNum)]->envelope)[]
+					if (keyProp == "content")      notes[noteId]->setContent(value);
+					else if (keyProp == "length")  notes[noteId]->setLength(std::stoi(value));
+					else if (keyProp == "pitch")   notes[noteId]->setPitch(value);
+					else if (keyProp == "tempo")   notes[noteId]->setTempo(std::stod(value));
+					else if (keyProp == "vel")     notes[noteId]->setVelocity(std::stoi(value));
+					else if (keyProp == "flags")   notes[noteId]->setFlags(value);
+					else if (keyProp == "rest")    notes[noteId]->setRestLength(std::stoi(value));
+					else if (keyProp == "vb")      notes[noteId]->setVbPath(value);
+					else if (keyProp == "mod")     notes[noteId]->setModulation(std::stoi(value));
+					else if (keyProp == "pitdata") notes[noteId]->setPitchCode(value);
+					//else if (noteProp == "env")    notes[std::stoi(noteNum)]->envelope)[]
 					//TODO: make envelopes work...
 					else if (isNoteNew) { //Invalid new note. Revert vector resize.
-						cout << "Error: Invalid property: " << noteProp << std::endl;
+						cout << "Error: Invalid property: " << keyProp << std::endl;
 						cout << "Error: Resizing vector back from " << notes.size() << " to " << oldListSize << std::endl;
-						delete notes[std::stoi(noteNum)];
+						delete notes[noteId];
 						notes.resize(oldListSize);
 					} else {
-						cout << "Error: Invalid property: " << noteProp << std::endl;
+						cout << "Error: Invalid property: " << keyProp << std::endl;
 					}
 				}
 			}
 		}
+	} else {
+		throw std::exception("s2s file could not be opened");
 	}
-	fillInvalidNotes(&notes);
+	deleteEmptyNotes(&notes);
 	return notes;
 }
 
@@ -165,22 +164,18 @@ bool FileParser::isLineValid(std::string line) {
 	return true;
 }
 
-void FileParser::fillInvalidNotes(std::vector<Note*> *notelist) {
+void FileParser::deleteEmptyNotes(std::vector<Note*> *noteList) {
 #if DEBUG
 	std::clog << std::endl << "DEBUG: Filling up empty notes" << std::endl;
 #endif
 	int emptyNotes = 0;
-	for (unsigned int i = 0; i < notelist->size(); i++) {
-		if (notelist->at(i) == nullptr) {
-			notelist->at(i) = new Note(globalContent, globalLength, globalPitch, globalVelocity, globalTempo,
-				globalFlags, globalRest, globalVB, globalModulation, globalPitchCode, globalEnv);
-#if DEBUG
-			std::clog << "DEBUG: Filled up empty note: " << i << std::endl;
-#endif
-			emptyNotes++;
+	for (unsigned int i = 0; i < noteList->size(); i++) {
+		if (noteList->at(i) == nullptr) {
+			noteList->erase(noteList->begin()+i);
+			i--;
 		}
 	}
 #if DEBUG
-	std::clog << "DEBUG: " << emptyNotes << " notes were filled" << std::endl << std::endl;
+	std::clog << "DEBUG: " << emptyNotes << " empty notes were deleted" << std::endl << std::endl;
 #endif
 }

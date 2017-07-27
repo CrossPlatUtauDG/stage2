@@ -3,8 +3,9 @@
 
 #include "Note.h"
 
-Note::Note(std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags,
+Note::Note(int noteId, std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags,
 	int restlength, std::string vbpath, int modulation, std::string pitchcode, std::vector<int> envelope) {
+	this->noteId = noteId;
 	this->content = content;
 	this->length = length;
 	this->pitch = pitch;
@@ -20,6 +21,7 @@ Note::Note(std::string content, int length, std::string pitch, int velocity, dou
 
 Note::~Note() { }
 
+void Note::setNoteId(int noteId) { this->noteId = noteId; }
 void Note::setContent(std::string lyric) { this->content = lyric; }
 void Note::setLength(int length) { this->length = length; }
 void Note::setPitch(std::string pitch) { this->pitch = pitch; }
@@ -31,6 +33,7 @@ void Note::setVbPath(std::string vbpath) { this->vbpath = vbpath; }
 void Note::setModulation(int modulation) { this->modulation = modulation; }
 void Note::setPitchCode(std::string pitchcode) { this->pitchcode = pitchcode; }
 
+int Note::getNoteId() { return noteId; }
 std::string Note::getContent() { return content; }
 int Note::getLength() { return length; }
 std::string Note::getPitch() { return pitch; }

@@ -111,7 +111,7 @@ void Oto::openFile() {
 	}
 }
 
-// This is broken...
+
 VoiceProp* Oto::getVPfromName(std::string sampleName) {
 	if (otoEntries.find(sampleName) != otoEntries.end()) {
 		return otoEntries[sampleName];

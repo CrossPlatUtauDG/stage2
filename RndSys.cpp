@@ -10,20 +10,20 @@
 
 using namespace std;
 
-void RndSys::prepRnd(vector<Note*> ntlist) {
-	std::string globalvb = ntlist[0]->getVbPath();
+void RndSys::prepareRender(std::vector<Note*> noteList) {
+	std::string globalvb = noteList[0]->getVbPath();
 	Oto *otoread = new Oto(globalvb);
 	
-	for (unsigned int i = 0; i < ntlist.size(); i++) {
+	for (unsigned int i = 0; i < noteList.size(); i++) {
 		VoiceProp *voiceprop = nullptr;
 		
-		if (ntlist[i]->getVbPath() != globalvb && ntlist[i]->getVbPath() != "") {
-			globalvb = ntlist[i]->getVbPath();
+		if (noteList[i]->getVbPath() != globalvb && noteList[i]->getVbPath() != "") {
+			globalvb = noteList[i]->getVbPath();
 			otoread = new Oto(globalvb);
 		}
 		
 		// supposed to get the voiceprop from the note text/content (but it's broken)
-		voiceprop = otoread->getVPfromName(ntlist[i]->getContent());
+		voiceprop = otoread->getVPfromName(noteList[i]->getContent());
 #if DEBUG
 		std::clog << "DEBUG: OTO data for note " << std::to_string(i) << std::endl;
 		std::clog << "fileName = " << voiceprop->fileName << std::endl;

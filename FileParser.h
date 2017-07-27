@@ -32,7 +32,7 @@ class FileParser {
 		vector<int> globalEnv = {0, 0, 100, 5, 100, 35, 0, 0};
 
 		bool isLineValid(std::string line);
-		void fillInvalidNotes(vector<Note*>* notelist);
+		void deleteEmptyNotes(std::vector<Note*>* noteList);
 		vector<int> envFromStr(std::string envstr);
 };
 

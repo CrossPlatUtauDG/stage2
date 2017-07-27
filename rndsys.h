@@ -14,12 +14,12 @@ class RndSys {
 		RndSys() { }
 		~RndSys() { }
 		
-		void prepRnd(vector<Note*> ntlist);
+		void prepareRender(std::vector<Note*> noteList);
 		void genArgs(vector<Note*> notesIn, vector<std::string> resamplerArgs, 
 			vector<std::string> wavtoolArgs); 
 	
 	private:
-		vector<Note> ntlst;
+		std::vector<Note> noteList;
 		
 		void correctOvlPre();
 };

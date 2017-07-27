@@ -41,3 +41,5 @@ This line has=an invalid key
 this.line=has an invalid noteID
 2.this=line has an invalid property. It should be ignored.
 10.this=line has a new note with an invalid property. The note must be immediately deleted to avoid resizing the vector.
+# The following line creates a note gap. The gap must be ignored if no valid notes are added inside.
+15.content=ta

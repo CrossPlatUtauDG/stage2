@@ -8,10 +8,11 @@ using namespace std;
 
 class Note {
 public:
-	Note(std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags, 
+	Note(int noteId, std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags, 
 		int restlength, std::string vbpath, int modulation, std::string pitchcode, std::vector<int> envelope);
 	~Note();
 
+	void setNoteId(int noteId);
 	void setContent(std::string content);
 	void setLength(int length);
 	void setPitch(std::string pitch);
@@ -23,6 +24,7 @@ public:
 	void setModulation(int modulation);
 	void setPitchCode(std::string pitchcode);
 
+	int getNoteId();
 	std::string getContent();
 	int getLength();
 	std::string getPitch();
@@ -35,6 +37,7 @@ public:
 	std::string getPitchCode();
 
 private:
+	int noteId;
 	std::string content;
 	int length;
 	std::string pitch;
