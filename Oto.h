@@ -2,7 +2,7 @@
 #define OTO_H
 
 #include <string>
-#include <vector>
+#include <map>
 
 #include "VoiceProp.h"
 
@@ -11,13 +11,13 @@ class Oto {
 		Oto(std::string path);
 		~Oto();
 		
-		void getVPfromName(std::string smpName, VoiceProp *vp);
+		VoiceProp* getVPfromName(std::string sampleName);
 	private:
 		std::string filePath;
 		std::string otoText;
 		int lines;
 		
-		std::vector<VoiceProp*> voices;
+		std::map<std::string, VoiceProp*> otoEntries;
 		
 		void openFile();
 };

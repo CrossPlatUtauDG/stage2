@@ -9,7 +9,7 @@
 #include "VoiceProp.h"
 #include "Oto.h"
 
-#define DEBUG true
+#define DEBUG false
 #define DEBUG_FULL false // enables debug output on every oto line, may result in a LOT of output
 
 using namespace std;
@@ -34,7 +34,6 @@ void Oto::openFile() {
 	if (otoStream.is_open()) {
 		std::string otoItem;
 		unsigned int index = 0;
-		voices.resize(8192);
 		
 		
 		// This was mostly ported from FVSS, there probably will be errors
@@ -88,19 +87,20 @@ void Oto::openFile() {
 #endif				
 				//TODO: might need to remove newlines from FileName property
 				
-				if (voices.size() <= index) voices.resize(index + 129);
-				voices[index] = vp;
+				otoEntries[vp->sampleName] = vp;
+				otoEntries[vp->fileName.substr(0, vp->fileName.length()-4)] = vp;
 #if DEBUG				
 				//print the first 2 oto property lists
 				if (index < 2) {
-					clog << "DEBUG: OTO data from entry " << std::to_string(index);
-					clog << "fileName = " << voices[index]->fileName << std::endl;
-					clog << "sampleName = " << voices[index]->sampleName << std::endl;
-					clog << "start = " << std::to_string(voices[index]->start) << std::endl;
-					clog << "consonant = " << std::to_string(voices[index]->consonant) << std::endl;
-					clog << "end = " << std::to_string(voices[index]->end) << std::endl;
-					clog << "preutterance = " << std::to_string(voices[index]->preutterance) << std::endl;
-					clog << "overlap = " << std::to_string(voices[index]->overlap) << std::endl;
+					clog << "DEBUG: OTO data from entry " << std::to_string(index) << std::endl;
+					clog << "fileName = " << otoEntries[vp->sampleName]->fileName << std::endl;
+					clog << "sampleName = " << otoEntries[vp->sampleName]->sampleName << std::endl;
+					clog << "start = " << std::to_string(otoEntries[vp->sampleName]->start) << std::endl;
+					clog << "consonant = " << std::to_string(otoEntries[vp->sampleName]->consonant) << std::endl;
+					clog << "end = " << std::to_string(otoEntries[vp->sampleName]->end) << std::endl;
+					clog << "preutterance = " << std::to_string(otoEntries[vp->sampleName]->preutterance) << std::endl;
+					clog << "overlap = " << std::to_string(otoEntries[vp->sampleName]->overlap) << std::endl;
+					std::clog << std::endl;
 				}
 #endif
 			}			
@@ -108,19 +108,16 @@ void Oto::openFile() {
 			
 			index++;
 		}
-		voices.resize(index + 1);
 	}
 }
 
 // This is broken...
-void Oto::getVPfromName(std::string smpName, VoiceProp *vp) {
-	for (int i = 0; i < voices.size(); i++) {
-		if (voices[i]->sampleName == smpName || voices[i]->sampleName == smpName + ".wav")
-			vp = voices[i];
+VoiceProp* Oto::getVPfromName(std::string sampleName) {
+	if (otoEntries.find(sampleName) != otoEntries.end()) {
+		return otoEntries[sampleName];
+	} else {
+		clog << "Error: Note with content \"" << sampleName << "\" doesn't exist in voicebank;"
+			<< " using empty VoiceProp." << std::endl; //TODO: Fix initialization
+		return new VoiceProp();
 	}
-#if DEBUG
-	clog << "DEBUG: Note with content \"" << smpName << "\" doesn't exist in voicebank;"
-		<< " using empty VoiceProp." << std::endl;
-#endif
-	vp = new VoiceProp();
 }

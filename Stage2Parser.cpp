@@ -16,7 +16,6 @@ int main() {
 	RndSys rendersys;
 	std::vector<Note*> noteList = fParser.parse("example.s2s");
 	
-
 	for (unsigned int i = 0; i < noteList.size(); i++) {
 		if (noteList[i] == nullptr) 
 			std::cout << "Note " << std::to_string(i) << " is invalid";
@@ -30,6 +29,7 @@ int main() {
 		std::cout << "\tTempo:\t\t" << noteList[i]->getTempo() << std::endl;
 		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::endl;
 		std::cout << "\tVB Path:\t" << noteList[i]->getVbPath() << std::endl;
+		std::cout << std::endl;
 		//std::cout << TODO: complete
 #endif
 	}

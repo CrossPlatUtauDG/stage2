@@ -10,7 +10,7 @@ global.length=480
 
 # Per-note properties
 0.content=la
-0.length=360 
+0.length=360
 0.pitch=G4
 0.vel=100
 0.flags=B40
@@ -31,7 +31,7 @@ global.length=480
 0.envy3=0
 
 # Properties can be set in any order
-2.content=a 
+2.content=a
 1.content=te
 # Undefined properties default to the global settings
 
