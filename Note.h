@@ -9,7 +9,7 @@ using namespace std;
 class Note {
 public:
 	Note(std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags, 
-		int restlength, std::string vbpath, int modulation, std::string pitchcode, vector<int> envelope);
+		int restlength, std::string vbpath, int modulation, std::string pitchcode, std::vector<int> envelope);
 	~Note();
 
 	void setContent(std::string content);
@@ -21,7 +21,7 @@ public:
 	void setRestLength(int restlength);
 	void setVbPath(std::string vbpath);
 	void setModulation(int modulation);
-	void setPitchCode(string pitchcode);
+	void setPitchCode(std::string pitchcode);
 
 	std::string getContent();
 	int getLength();
@@ -33,9 +33,6 @@ public:
 	std::string getVbPath();
 	int getModulation();
 	std::string getPitchCode();
-	
-	vector<int> envelope;
-	int corrVal;
 
 private:
 	std::string content;
@@ -47,7 +44,7 @@ private:
 	int restlength;
 	std::string vbpath;
 	int modulation;
-	string pitchcode;
-	
+	std::string pitchcode;
+	std::vector<int> envelope;
 };
 #endif

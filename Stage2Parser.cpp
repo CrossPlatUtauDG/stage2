@@ -29,6 +29,7 @@ int main() {
 		std::cout << "\tFlags:\t\t" << noteList[i]->getFlags() << std::endl;
 		std::cout << "\tTempo:\t\t" << noteList[i]->getTempo() << std::endl;
 		std::cout << "\tRest:\t\t" << noteList[i]->getRestLength() << std::endl;
+		std::cout << "\tVB Path:\t" << noteList[i]->getVbPath() << std::endl;
 		//std::cout << TODO: complete
 #endif
 	}
