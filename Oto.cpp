@@ -73,11 +73,11 @@ void Oto::openFile() {
 				clog << "DEBUG_FULL: OTO fileName: " << vp->fileName << std::endl;
 				clog << "DEBUG_FULL: OTO sampleName: " << vp->sampleName << std::endl;
 #endif
-				vp->start = std::stoi(item.substr(index2 + 1, index3 - index2 - 1));
-                vp->consonant = std::stoi(item.substr(index3 + 1, index4 - index3 - 1));
-                vp->end = std::stoi(item.substr(index4 + 1, index5 - index4 - 1));
-                vp->preutterance = std::stoi(item.substr(index5 + 1, index6 - index5 - 1));
-                vp->overlap = std::stoi(item.substr(index6 + 1));
+				vp->start = std::stod(item.substr(index2 + 1, index3 - index2 - 1));
+                vp->consonant = std::stod(item.substr(index3 + 1, index4 - index3 - 1));
+                vp->end = std::stod(item.substr(index4 + 1, index5 - index4 - 1));
+                vp->preutterance = std::stod(item.substr(index5 + 1, index6 - index5 - 1));
+                vp->overlap = std::stod(item.substr(index6 + 1));
 #if DEBUG_FULL
 				clog << "DEBUG_FULL: Printing all parsed OTO properties:" << std::endl;
 				clog << "	" << std::to_string(vp->start) << std::endl;
