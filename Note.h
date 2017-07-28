@@ -22,6 +22,9 @@ public:
 	void setRestLength(int restlength);
 	void setVbPath(std::string vbpath);
 	void setModulation(int modulation);
+	void setConsonant(double consonant);
+	void setOvelap(double overlap);
+	void setPreutterance(double preutterance);
 	void setPitchCode(std::string pitchcode);
 
 	int getNoteId();
@@ -34,6 +37,9 @@ public:
 	int getRestLength();
 	std::string getVbPath();
 	int getModulation();
+	double getConsonant();
+	double getOverlap();
+	double getPreutterance();
 	std::string getPitchCode();
 
 private:
@@ -47,6 +53,9 @@ private:
 	int restlength;
 	std::string vbpath;
 	int modulation;
+	double consonant = -1;
+	double overlap = -1;
+	double preutterance = -1;
 	std::string pitchcode;
 	std::vector<int> envelope;
 };

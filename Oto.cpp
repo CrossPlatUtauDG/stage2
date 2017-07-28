@@ -9,7 +9,7 @@
 #include "VoiceProp.h"
 #include "Oto.h"
 
-#define DEBUG false
+#define DEBUG true
 #define DEBUG_FULL false // enables debug output on every oto line, may result in a LOT of output
 
 using namespace std;
@@ -19,16 +19,21 @@ Oto::Oto(std::string path) {
 	openFile();
 }
 
-Oto::~Oto() { }
+Oto::~Oto() {
+	for (auto& voiceprop : otoEntries) {
+		delete voiceprop.second;
+	}
+#if DEBUG
+	std::clog << "Oto object destructed: " << filePath << std::endl;
+#endif
+}
 
 void Oto::openFile() {
 	std::ifstream otoStream;
 	otoStream.open(filePath + "/oto.ini");
 	
 	if (!otoStream) {
-		//TODO: fallback to default from config file
-		cout << "Error: Voicebank \"" << filePath << "\" not found or format unsupported. Stop." << std::endl;
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Could not read " + filePath + "/oto.ini");
 	}
 	
 	if (otoStream.is_open()) {
@@ -89,7 +94,7 @@ void Oto::openFile() {
 				
 				otoEntries[vp->sampleName] = vp;
 				otoEntries[vp->fileName.substr(0, vp->fileName.length()-4)] = vp;
-#if DEBUG				
+#if DEBUG_FULL				
 				//print the first 2 oto property lists
 				if (index < 2) {
 					clog << "DEBUG: OTO data from entry " << std::to_string(index) << std::endl;
@@ -111,13 +116,10 @@ void Oto::openFile() {
 	}
 }
 
-
-VoiceProp* Oto::getVPfromName(std::string sampleName) {
+VoiceProp Oto::getVPfromName(std::string sampleName) {
 	if (otoEntries.find(sampleName) != otoEntries.end()) {
-		return otoEntries[sampleName];
+		return *otoEntries[sampleName];
 	} else {
-		clog << "Error: Note with content \"" << sampleName << "\" doesn't exist in voicebank;"
-			<< " using empty VoiceProp." << std::endl; //TODO: Fix initialization
-		return new VoiceProp();
+		throw std::runtime_error(std::string("No match for note with content ") + sampleName + std::string(" in voicebank oto"));
 	}
 }

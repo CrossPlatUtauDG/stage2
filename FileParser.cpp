@@ -67,17 +67,20 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 						isNoteNew = true;
 					}
 
-					if (keyProp == "content")      notes[noteId]->setContent(value);
-					else if (keyProp == "length")  notes[noteId]->setLength(std::stoi(value));
-					else if (keyProp == "pitch")   notes[noteId]->setPitch(value);
-					else if (keyProp == "tempo")   notes[noteId]->setTempo(std::stod(value));
-					else if (keyProp == "vel")     notes[noteId]->setVelocity(std::stoi(value));
-					else if (keyProp == "flags")   notes[noteId]->setFlags(value);
-					else if (keyProp == "rest")    notes[noteId]->setRestLength(std::stoi(value));
-					else if (keyProp == "vb")      notes[noteId]->setVbPath(value);
-					else if (keyProp == "mod")     notes[noteId]->setModulation(std::stoi(value));
+					if (keyProp == "content") notes[noteId]->setContent(value);
+					else if (keyProp == "length") notes[noteId]->setLength(std::stoi(value));
+					else if (keyProp == "pitch") notes[noteId]->setPitch(value);
+					else if (keyProp == "tempo") notes[noteId]->setTempo(std::stod(value));
+					else if (keyProp == "vel") notes[noteId]->setVelocity(std::stoi(value));
+					else if (keyProp == "flags") notes[noteId]->setFlags(value);
+					else if (keyProp == "rest") notes[noteId]->setRestLength(std::stoi(value));
+					else if (keyProp == "vb") notes[noteId]->setVbPath(value);
+					else if (keyProp == "mod") notes[noteId]->setModulation(std::stoi(value));
+					else if (keyProp == "consonant") notes[noteId]->setModulation(std::stoi(value));
+					else if (keyProp == "overlap") notes[noteId]->setModulation(std::stoi(value));
+					else if (keyProp == "preutterance") notes[noteId]->setModulation(std::stoi(value));
 					else if (keyProp == "pitdata") notes[noteId]->setPitchCode(value);
-					//else if (noteProp == "env")    notes[std::stoi(noteNum)]->envelope)[]
+					//else if (noteProp == "env") notes[std::stoi(noteNum)]->envelope)[]
 					//TODO: make envelopes work...
 					else if (isNoteNew) { //Invalid new note. Revert vector resize.
 						cout << "Error: Invalid property: " << keyProp << std::endl;
@@ -91,7 +94,7 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 			}
 		}
 	} else {
-		throw std::exception("s2s file could not be opened");
+		throw std::runtime_error("s2s file could not be opened");
 	}
 	deleteEmptyNotes(&notes);
 	return notes;

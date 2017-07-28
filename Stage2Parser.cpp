@@ -34,7 +34,6 @@ int main(int argc, char* argv[]) {
 		std::cerr << "Exception Thrown: " << e.what() << std::endl;
 		return 1;
 	}
-
 #if DEBUG
 	for (Note* note : noteList) {
 		std::cout << "Note " << note->getNoteId() << ":" << endl;
@@ -54,7 +53,7 @@ int main(int argc, char* argv[]) {
 	renderSystem.prepareRender(noteList);
 
 	for (unsigned int i = 0; i < noteList.size(); i++) delete noteList[i];
-		
+
     return 0;
 }
 

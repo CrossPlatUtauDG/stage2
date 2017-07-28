@@ -11,7 +11,7 @@ class Oto {
 		Oto(std::string path);
 		~Oto();
 		
-		VoiceProp* getVPfromName(std::string sampleName);
+		VoiceProp getVPfromName(std::string sampleName);
 	private:
 		std::string filePath;
 		std::string otoText;
