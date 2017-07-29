@@ -76,9 +76,10 @@ std::vector<Note*> FileParser::parse(std::string filepath) {
 					else if (keyProp == "rest") notes[noteId]->setRestLength(std::stoi(value));
 					else if (keyProp == "vb") notes[noteId]->setVbPath(value);
 					else if (keyProp == "mod") notes[noteId]->setModulation(std::stoi(value));
-					else if (keyProp == "consonant") notes[noteId]->setModulation(std::stoi(value));
-					else if (keyProp == "overlap") notes[noteId]->setModulation(std::stoi(value));
-					else if (keyProp == "preutterance") notes[noteId]->setModulation(std::stoi(value));
+					else if (keyProp == "consonant") notes[noteId]->setConsonant(std::stod(value));
+					else if (keyProp == "overlap") notes[noteId]->setOverlap(std::stod(value));
+					else if (keyProp == "preutterance") notes[noteId]->setPreutterance(std::stod(value));
+					else if (keyProp == "stp") notes[noteId]->setStp(std::stod(value));
 					else if (keyProp == "pitdata") notes[noteId]->setPitchCode(value);
 					//else if (noteProp == "env") notes[std::stoi(noteNum)]->envelope)[]
 					//TODO: make envelopes work...

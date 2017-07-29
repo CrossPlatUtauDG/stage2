@@ -13,7 +13,7 @@ class Oto {
 		
 		VoiceProp getVPfromName(std::string sampleName);
 	private:
-		std::string filePath;
+		std::string fileDir;
 		std::string otoText;
 		int lines;
 		

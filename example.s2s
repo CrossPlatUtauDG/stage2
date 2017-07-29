@@ -33,6 +33,7 @@ global.length=480
 # Properties can be set in any order
 2.content=a
 1.content=te
+2.overlap=100
 # Undefined properties default to the global settings
 
 # Error tolerance tests

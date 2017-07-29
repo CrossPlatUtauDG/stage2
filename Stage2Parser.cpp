@@ -7,6 +7,7 @@
 #include "Note.h"
 #include "FileParser.h"
 #include "RndSys.h"
+#include "VoiceProp.h"
 
 #define DEBUG true
 
@@ -50,7 +51,8 @@ int main(int argc, char* argv[]) {
 	}
 #endif
 	
-	renderSystem.prepareRender(noteList);
+	std::map<int, VoiceProp> voiceProps = renderSystem.getVoiceProps(noteList);
+	renderSystem.correctVoiceProps(&noteList, &voiceProps);
 
 	for (unsigned int i = 0; i < noteList.size(); i++) delete noteList[i];
 

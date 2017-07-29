@@ -8,22 +8,25 @@
 
 #include "Note.h"
 #include "Oto.h"
-
-using namespace std;
+#include "VoiceProp.h"
 
 class RndSys {
 	public:
 		RndSys() { }
 		~RndSys();
 		
-		void prepareRender(std::vector<Note*> noteList);
-		void generateArgs(vector<Note*> notesIn, vector<std::string> resamplerArgs, 
-			vector<std::string> wavtoolArgs); 
+		std::map<int, VoiceProp> getVoiceProps(std::vector<Note*> noteList);
+
+		/**
+			Overrides oto default VoiceProps and applies 食い込み補正 (Bite correction)
+		*/
+		void correctVoiceProps(std::vector<Note*> *noteList, std::map<int, VoiceProp> *voiceProps);
+
+		void generateArgs(std::vector<Note*> *notesList, std::map<int, VoiceProp> *voiceProps,
+			std::vector<std::string> *resamplerArgs, std::vector<std::string> *wavtoolArgs); 
 	
 	private:
 		std::map<std::string, Oto*> otos;
-
-		void correctOvlPre();
 };
 
 #endif

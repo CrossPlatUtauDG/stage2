@@ -15,7 +15,7 @@
 using namespace std;
 
 Oto::Oto(std::string path) {
-	filePath = path;
+	fileDir = path;
 	openFile();
 }
 
@@ -24,16 +24,16 @@ Oto::~Oto() {
 		delete voiceprop.second;
 	}
 #if DEBUG
-	std::clog << "Oto object destructed: " << filePath << std::endl;
+	std::clog << "Oto object destructed: " << fileDir << std::endl;
 #endif
 }
 
 void Oto::openFile() {
 	std::ifstream otoStream;
-	otoStream.open(filePath + "/oto.ini");
+	otoStream.open(fileDir + "/oto.ini");
 	
 	if (!otoStream) {
-		throw std::runtime_error("Could not read " + filePath + "/oto.ini");
+		throw std::runtime_error("Could not read " + fileDir + "/oto.ini");
 	}
 	
 	if (otoStream.is_open()) {
@@ -43,9 +43,7 @@ void Oto::openFile() {
 		
 		// This was mostly ported from FVSS, there probably will be errors
 		// Also needs error handling 
-		while (getline(otoStream, otoItem)) {
-			VoiceProp *vp = new VoiceProp();
-			
+		while (getline(otoStream, otoItem)) {			
 			// needed because of newline fix
 			std::string item = otoItem;
 #if DEBUG_FULL
@@ -71,43 +69,29 @@ void Oto::openFile() {
 				clog << "	" << std::to_string(index5) << std::endl;
 #endif
 				// Chop up line into individual properties and add them to vp
-				vp->fileName = item.substr(0, index1);
-				vp->sampleName = item.substr(index1 + 1, index2 - index1 - 1);
+				std::string fileName = item.substr(0, index1);
+				std::string sampleName = fileName.substr(0, fileName.length() - 4);
+				std::string alias = item.substr(index1 + 1, index2 - index1 - 1);
+				double start = std::stod(item.substr(index2 + 1, index3 - index2 - 1));
+				double consonant = std::stod(item.substr(index3 + 1, index4 - index3 - 1));
+				double end = std::stod(item.substr(index4 + 1, index5 - index4 - 1));
+				double preutterance = std::stod(item.substr(index5 + 1, index6 - index5 - 1));
+				double overlap = std::stod(item.substr(index6 + 1));
 #if DEBUG_FULL
-				clog << "DEBUG_FULL: OTO fileName: " << vp->fileName << std::endl;
-				clog << "DEBUG_FULL: OTO sampleName: " << vp->sampleName << std::endl;
-#endif
-				vp->start = std::stod(item.substr(index2 + 1, index3 - index2 - 1));
-                vp->consonant = std::stod(item.substr(index3 + 1, index4 - index3 - 1));
-                vp->end = std::stod(item.substr(index4 + 1, index5 - index4 - 1));
-                vp->preutterance = std::stod(item.substr(index5 + 1, index6 - index5 - 1));
-                vp->overlap = std::stod(item.substr(index6 + 1));
-#if DEBUG_FULL
+				clog << "DEBUG_FULL: OTO fileName: " << fileName << std::endl;
+				clog << "DEBUG_FULL: OTO sampleName: " << sampleName << std::endl;
+				clog << "DEBUG_FULL: OTO alias: " << alias << std::endl;
 				clog << "DEBUG_FULL: Printing all parsed OTO properties:" << std::endl;
-				clog << "	" << std::to_string(vp->start) << std::endl;
-				clog << "	" << std::to_string(vp->consonant) << std::endl;
-				clog << "	" << std::to_string(vp->end) << std::endl;
-				clog << "	" << std::to_string(vp->preutterance) << std::endl;
-				clog << "	" << std::to_string(vp->overlap) << std::endl;
+				clog << "	" << std::to_string(start) << std::endl;
+				clog << "	" << std::to_string(consonant) << std::endl;
+				clog << "	" << std::to_string(end) << std::endl;
+				clog << "	" << std::to_string(preutterance) << std::endl;
+				clog << "	" << std::to_string(overlap) << std::endl;
 #endif				
 				//TODO: might need to remove newlines from FileName property
 				
-				otoEntries[vp->sampleName] = vp;
-				otoEntries[vp->fileName.substr(0, vp->fileName.length()-4)] = vp;
-#if DEBUG_FULL				
-				//print the first 2 oto property lists
-				if (index < 2) {
-					clog << "DEBUG: OTO data from entry " << std::to_string(index) << std::endl;
-					clog << "fileName = " << otoEntries[vp->sampleName]->fileName << std::endl;
-					clog << "sampleName = " << otoEntries[vp->sampleName]->sampleName << std::endl;
-					clog << "start = " << std::to_string(otoEntries[vp->sampleName]->start) << std::endl;
-					clog << "consonant = " << std::to_string(otoEntries[vp->sampleName]->consonant) << std::endl;
-					clog << "end = " << std::to_string(otoEntries[vp->sampleName]->end) << std::endl;
-					clog << "preutterance = " << std::to_string(otoEntries[vp->sampleName]->preutterance) << std::endl;
-					clog << "overlap = " << std::to_string(otoEntries[vp->sampleName]->overlap) << std::endl;
-					std::clog << std::endl;
-				}
-#endif
+				otoEntries[alias] = new VoiceProp(fileDir, fileName, sampleName, alias, start, consonant, end, preutterance, overlap);
+				otoEntries[sampleName] = otoEntries[alias];
 			}			
 			catch (...) { }
 			

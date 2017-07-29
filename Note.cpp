@@ -21,6 +21,10 @@ Note::Note(int noteId, std::string content, int length, std::string pitch, int v
 
 Note::~Note() { }
 
+int Note::getLengthInMs() {
+	return (length / 480) * 1000 * (60 / tempo);
+}
+
 void Note::setNoteId(int noteId) { this->noteId = noteId; }
 void Note::setContent(std::string lyric) { this->content = lyric; }
 void Note::setLength(int length) { this->length = length; }
@@ -32,8 +36,9 @@ void Note::setRestLength(int restlength) { this->restlength = restlength; }
 void Note::setVbPath(std::string vbpath) { this->vbpath = vbpath; }
 void Note::setModulation(int modulation) { this->modulation = modulation; }
 void Note::setConsonant(double consonant) { this->consonant = consonant; }
-void Note::setOvelap(double overlap) { this->overlap = overlap; }
+void Note::setOverlap(double overlap) { this->overlap = overlap; }
 void Note::setPreutterance(double preutterance) { this->preutterance = preutterance; }
+void Note::setStp(double stp) { this->stp = stp; }
 void Note::setPitchCode(std::string pitchcode) { this->pitchcode = pitchcode; }
 
 int Note::getNoteId() { return noteId; }
@@ -49,4 +54,5 @@ int Note::getModulation() { return modulation; }
 double Note::getConsonant() { return consonant; }
 double Note::getOverlap() { return overlap; }
 double Note::getPreutterance() { return preutterance; }
+double Note::getStp() { return stp; }
 std::string Note::getPitchCode() { return pitchcode; }

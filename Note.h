@@ -4,13 +4,13 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class Note {
 public:
 	Note(int noteId, std::string content, int length, std::string pitch, int velocity, double tempo, std::string flags, 
 		int restlength, std::string vbpath, int modulation, std::string pitchcode, std::vector<int> envelope);
 	~Note();
+
+	int getLengthInMs();
 
 	void setNoteId(int noteId);
 	void setContent(std::string content);
@@ -23,8 +23,9 @@ public:
 	void setVbPath(std::string vbpath);
 	void setModulation(int modulation);
 	void setConsonant(double consonant);
-	void setOvelap(double overlap);
+	void setOverlap(double overlap);
 	void setPreutterance(double preutterance);
+	void setStp(double stp);
 	void setPitchCode(std::string pitchcode);
 
 	int getNoteId();
@@ -40,6 +41,7 @@ public:
 	double getConsonant();
 	double getOverlap();
 	double getPreutterance();
+	double getStp();
 	std::string getPitchCode();
 
 private:
@@ -56,6 +58,7 @@ private:
 	double consonant = -1;
 	double overlap = -1;
 	double preutterance = -1;
+	double stp = 0;
 	std::string pitchcode;
 	std::vector<int> envelope;
 };

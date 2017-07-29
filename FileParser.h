@@ -7,8 +7,6 @@
 #include <vector>
 
 #include "Note.h"
-
-using namespace std;
  
 class FileParser {
 	public:
@@ -29,11 +27,11 @@ class FileParser {
 		int globalRest = 0;
 		int globalModulation = 0;
 		double globalTempo = 120;
-		vector<int> globalEnv = {0, 0, 100, 5, 100, 35, 0, 0};
+		std::vector<int> globalEnv = {0, 0, 100, 5, 100, 35, 0, 0};
 
 		bool isLineValid(std::string line);
 		void deleteEmptyNotes(std::vector<Note*>* noteList);
-		vector<int> envFromStr(std::string envstr);
+		std::vector<int> envFromStr(std::string envstr);
 };
 
 #endif
