@@ -1,5 +1,7 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <utility>
@@ -100,6 +102,35 @@ void RndSys::correctVoiceProps(std::vector<Note*> *noteList, std::map<int, Voice
 
 		} catch (std::out_of_range e) {
 			std::cerr << e.what() << std::endl;
+		}
+	}
+}
+
+void RndSys::generateArgs(std::vector<Note*> *notesList, std::map<int, VoiceProp> *voiceProps, std::vector<std::string> *resamplerArgs, std::vector<std::string> *wavtoolArgs) {
+	for (unsigned int i = 0; i < notesList->size(); i++) {
+		try {
+			int noteId = notesList->at(i)->getNoteId();
+			std::string fileName = voiceProps->at(noteId).getFileName();
+		}
+		catch (std::out_of_range e) { // Treat as rest
+			int noteId = notesList->at(i)->getNoteId();
+			int nextNoteId = notesList->at(i+1)->getNoteId();
+			double correctionValue;
+			try {
+				correctionValue = 0 - voiceProps->at(nextNoteId).getPreutterance() + voiceProps->at(nextNoteId).getOverlap();
+			} catch (std::out_of_range e) { // Next note is rest as well, correction value is 0
+				correctionValue = 0;
+			}
+			std::stringstream cvStream;
+			cvStream << fixed << setprecision(1) << correctionValue;
+			std::string correctionValueString = cvStream.str();
+
+			std::stringstream tempoStream;
+			tempoStream << fixed << setprecision(1) << notesList->at(i)->getTempo();
+			if (correctionValue >= 0) correctionValueString = "+" + correctionValueString;
+			std::string wavtoolArg = "temp.wav " + notesList->at(i)->getVbPath() + "/" + notesList->at(i)->getContent() + ".wav 0 " + std::to_string(notesList->at(i)->getLength()) + "@" + tempoStream.str() + correctionValueString + " 0 0";
+			resamplerArgs->push_back("");
+			wavtoolArgs->push_back(wavtoolArg);
 		}
 	}
 }

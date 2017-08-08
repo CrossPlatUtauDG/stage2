@@ -54,6 +54,10 @@ int main(int argc, char* argv[]) {
 	std::map<int, VoiceProp> voiceProps = renderSystem.getVoiceProps(noteList);
 	renderSystem.correctVoiceProps(&noteList, &voiceProps);
 
+	std::vector<std::string> resamplerArgs;
+	std::vector<std::string> wavtoolArgs;
+	renderSystem.generateArgs(&noteList, &voiceProps, &resamplerArgs, &wavtoolArgs);
+
 	for (unsigned int i = 0; i < noteList.size(); i++) delete noteList[i];
 
     return 0;
