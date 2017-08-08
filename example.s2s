@@ -5,7 +5,7 @@
 global.vb=/home/user/example
 global.tempo=120
 global.flags=B1
-global.pitch=A4 
+global.pitch=A4
 global.length=480
 
 # Per-note properties

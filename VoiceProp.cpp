@@ -9,7 +9,7 @@ VoiceProp::VoiceProp(std::string fileDir, std::string fileName, std::string samp
 VoiceProp::~VoiceProp() {}
 
 std::string VoiceProp::getSamplePath() {
-	return fileDir + fileName;
+	return fileDir + "/" + fileName;
 }
 
 void VoiceProp::setFileDir(std::string) { this->fileDir = fileDir; }

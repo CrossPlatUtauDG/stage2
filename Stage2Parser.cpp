@@ -57,6 +57,12 @@ int main(int argc, char* argv[]) {
 	std::vector<std::string> resamplerArgs;
 	std::vector<std::string> wavtoolArgs;
 	renderSystem.generateArgs(&noteList, &voiceProps, &resamplerArgs, &wavtoolArgs);
+#if DEBUG
+	for (unsigned int i = 0; i < resamplerArgs.size(); i++) {
+		std::clog << resamplerArgs.at(i) << std::endl;
+		std::clog << wavtoolArgs.at(i) << std::endl;
+	}
+#endif
 
 	for (unsigned int i = 0; i < noteList.size(); i++) delete noteList[i];
 
